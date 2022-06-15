@@ -7,6 +7,7 @@ const txtInput = document.querySelector('.new-todo');
 const btnDelete = document.querySelector('.clear-completed');
 const ulFilters = document.querySelector('.filters');
 const anchorFilters = document.querySelectorAll('.filtro');
+const pendingCount = document.querySelector('.todo-count');
 
 export const createToDoHtml = (todo) => {
     const htmlToDo = `
@@ -27,6 +28,11 @@ export const createToDoHtml = (todo) => {
         return div.firstElementChild;
 }
 
+export const pendings = () => {
+    let pendingArray = todoList.todos.filter(elem => elem.completed == false);
+    return pendingCount.children[0].innerText = pendingArray.length;
+};
+
 // Events
 txtInput.addEventListener('keyup', (event) => {
     if (event.keyCode === 13 && txtInput.value.length > 0) {
@@ -36,6 +42,7 @@ txtInput.addEventListener('keyup', (event) => {
 
         createToDoHtml(newToDo);
         txtInput.value = '';
+        pendings();
     }
 });
 
@@ -47,9 +54,11 @@ divToDoList.addEventListener('click', (event) => {
     if (elementName.includes('input')) {
         todoList.markAsCompleted(toDoId);
         toDoElement.classList.toggle('completed');
+        pendings();
     } else if (elementName.includes('button')) {
         todoList.deleteTodo(toDoId)
         divToDoList.removeChild(toDoElement);
+        pendings();
     }
 })
 
@@ -61,6 +70,7 @@ btnDelete.addEventListener('click', () => {
         
         if (element.classList.contains('completed')) {
             divToDoList.removeChild(element);
+            pendings();
         }
     }
 });
